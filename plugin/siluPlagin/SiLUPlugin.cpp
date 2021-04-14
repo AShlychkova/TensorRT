@@ -20,11 +20,11 @@
 
 using namespace nvinfer1;
 using nvinfer1::PluginType;
-using nvinfer1::plugin::LReluPluginCreator;
+using nvinfer1::plugin::SiLUPluginCreator;
 using nvinfer1::plugin::SiLU;
 
-static const char* LRELU_PLUGIN_VERSION{"1"};
-static const char* LRELU_PLUGIN_NAME{"SiLU"};
+static const char* SILU_PLUGIN_VERSION{"1"};
+static const char* SILU_PLUGIN_NAME{"SiLU"};
 PluginFieldCollection SiLUPluginCreator::mFC{};
 std::vector<PluginField> SiLUPluginCreator::mPluginAttributes;
 
@@ -105,12 +105,12 @@ size_t SiLU::getWorkspaceSize(int maxBatchSize) const
 
 const char* SiLU::getPluginType() const
 {
-    return LRELU_PLUGIN_NAME;
+    return SILU_PLUGIN_NAME;
 }
 
 const char* SiLU::getPluginVersion() const
 {
-    return LRELU_PLUGIN_VERSION;
+    return SILU_PLUGIN_VERSION;
 }
 
 void SiLU::destroy()
@@ -158,9 +158,8 @@ IPluginV2* SiLUPluginCreator::createPlugin(const char* name, const PluginFieldCo
 IPluginV2* SiLUPluginCreator::deserializePlugin(const char* name, const void* serialData, size_t serialLength)
 {
     // This object will be deleted when the network is destroyed, which will
-    // call LReluPlugin::destroy()
     SiLUPlugin* plugin = new SiLUPlugin(serialData, serialLength);
     plugin->setPluginNamespace(mNamespace.c_str());
     return plugin;
 }
-// LeakReLU }}}
+
